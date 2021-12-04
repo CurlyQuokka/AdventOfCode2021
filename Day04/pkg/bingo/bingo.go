@@ -24,16 +24,6 @@ type bingoBoard struct {
 	ScoreBoard *board
 }
 
-func (bs *BingoSubsystem) removeAt(index int) {
-	bb := []*bingoBoard{}
-	for i, _ := range bs.boards {
-		if i != index {
-			bb = append(bb, bs.boards[i])
-		}
-	}
-	bs.boards = bb
-}
-
 type BingoSubsystem struct {
 	rawData   []string
 	input     []int
@@ -48,12 +38,6 @@ func NewBingoSubsystem(path string) *BingoSubsystem {
 	bs.gameScore = 0
 	bs.convertBoards(bs.rawData[1:])
 	return bs
-}
-
-func (bs *BingoSubsystem) PrintRawData() {
-	for _, line := range bs.rawData {
-		fmt.Println(line)
-	}
 }
 
 func convertInput(input, separator string) []int {
@@ -71,7 +55,6 @@ func convertInput(input, separator string) []int {
 }
 
 func (bs *BingoSubsystem) convertBoards(input []string) {
-	// input should start with empty line
 	i := 0
 	b := &board{}
 	for _, line := range input {
@@ -97,25 +80,9 @@ func (bs *BingoSubsystem) convertBoards(input []string) {
 	}
 }
 
-func (bs *BingoSubsystem) PrintBoards() {
-	for _, b := range bs.boards {
-		fmt.Printf("%v\n", *(b.GameBoard))
-	}
-}
-
-func (bs *BingoSubsystem) PlayGame() {
+func (bs *BingoSubsystem) PlayGame(findLoosing bool) {
 	for _, val := range bs.input {
-		result := bs.playRound(val, false)
-		if result > -1 {
-			bs.gameScore = result
-			break
-		}
-	}
-}
-
-func (bs *BingoSubsystem) FindLoosingBoard() {
-	for _, val := range bs.input {
-		result := bs.playRound(val, true)
+		result := bs.playRound(val, findLoosing)
 		if result > -1 {
 			bs.gameScore = result
 			break
@@ -152,12 +119,32 @@ func (bs *BingoSubsystem) playRound(value int, remove bool) int {
 	return -1
 }
 
+func (bs *BingoSubsystem) PrintScore() {
+	fmt.Printf("Game score: %d\n", bs.gameScore)
+}
+
+func (bs *BingoSubsystem) WreckThisCasino() {
+	for _, gb := range bs.boards {
+		gb.ScoreBoard = &board{}
+	}
+	bs.gameScore = 0
+}
+
+func (bs *BingoSubsystem) removeAt(index int) {
+	bb := []*bingoBoard{}
+	for i, _ := range bs.boards {
+		if i != index {
+			bb = append(bb, bs.boards[i])
+		}
+	}
+	bs.boards = bb
+}
+
 func (b *board) isRowWinning() (bool, int) {
 	sum := 0
 	for row := 0; row < boardSize; row++ {
 		for column := 0; column < boardSize; column++ {
 			sum += b[row][column]
-			// fmt.Printf("row sum %d\n", sum)
 		}
 		if sum == boardSize {
 			return true, row
@@ -172,7 +159,6 @@ func (b *board) isColumnWinning() (bool, int) {
 	for column := 0; column < boardSize; column++ {
 		for row := 0; row < boardSize; row++ {
 			sum += b[row][column]
-			// fmt.Printf("Column sum %d\n", sum)
 		}
 		if sum == boardSize {
 			return true, column
@@ -192,15 +178,4 @@ func (b *bingoBoard) unmarkedSum() int {
 		}
 	}
 	return sum
-}
-
-func (bs *BingoSubsystem) PrintScore() {
-	fmt.Printf("Game score: %d\n", bs.gameScore)
-}
-
-func (bs *BingoSubsystem) WreckThisCasino() {
-	for _, gb := range bs.boards {
-		gb.ScoreBoard = &board{}
-	}
-	bs.gameScore = 0
 }

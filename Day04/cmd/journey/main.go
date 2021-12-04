@@ -10,9 +10,9 @@ func main() {
 	s := submarine.NewSubmarine()
 	s.InitializeBingoSubsystem(os.Args[1])
 	bs := s.GetBingoSubsystem()
-	bs.PlayGame()
+	bs.PlayGame(false)
 	bs.PrintScore()
 	bs.WreckThisCasino()
-	bs.FindLoosingBoard()
+	bs.PlayGame(true)
 	bs.PrintScore()
 }
