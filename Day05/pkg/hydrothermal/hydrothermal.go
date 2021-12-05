@@ -103,7 +103,7 @@ func (ha *HydrothermalAvoidance) Print() {
 
 func (ha *HydrothermalAvoidance) prepareBoard() {
 	b := make([][]int, ha.maxY+1)
-	for i, _ := range b {
+	for i := range b {
 		b[i] = make([]int, ha.maxX+1)
 	}
 	ha.board = b
