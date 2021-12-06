@@ -15,12 +15,12 @@ func main() {
 	fo := s.GetFishObservatory()
 	fo.ObserveInitialPopulation()
 
-	v, err := strconv.Atoi(os.Args[2])
+	daysToWatch, err := strconv.Atoi(os.Args[2])
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 
-	fo.SimulatePopulation(v)
+	fo.SimulatePopulation(daysToWatch)
 	fo.HowMuchIsTheFish()
 }
