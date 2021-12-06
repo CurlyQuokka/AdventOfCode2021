@@ -24,6 +24,7 @@ func InitilizeFishobservatory(path string) *Fishobservatory {
 	bs := &Fishobservatory{}
 	data := utils.LoadData(path)
 	splitData := strings.Split(data[0], inputSeparator)
+
 	for _, s := range splitData {
 		v, err := strconv.Atoi(s)
 		if err != nil {
@@ -32,6 +33,7 @@ func InitilizeFishobservatory(path string) *Fishobservatory {
 		}
 		bs.input = append(bs.input, v)
 	}
+
 	return bs
 }
 
@@ -45,10 +47,13 @@ func (fb *Fishobservatory) ObserveInitialPopulation() {
 func (fb *Fishobservatory) SimulatePopulation(days int) {
 	for day := 0; day <= days; day++ {
 		breeded := fb.observed[0]
+
 		for i := 1; i < len(fb.observed); i++ {
 			fb.observed[i-1] = fb.observed[i]
 		}
+
 		fb.observed[oldTimeToBreed] += breeded
+
 		if day < days {
 			fb.observed[youngTimeToBreed] = breeded
 		} else {
@@ -62,5 +67,6 @@ func (fb *Fishobservatory) HowMuchIsTheFish() {
 	for _, v := range fb.observed {
 		sum += v
 	}
+
 	fmt.Printf("Nuber of fishes in the school: %d\n", sum)
 }
