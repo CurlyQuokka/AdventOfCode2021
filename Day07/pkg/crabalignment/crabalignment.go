@@ -12,9 +12,7 @@ import (
 )
 
 const (
-	inputSeparator   = ","
-	youngTimeToBreed = 8
-	oldTimeToBreed   = 6
+	inputSeparator = ","
 )
 
 type CrabAlignment struct {
