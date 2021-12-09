@@ -9,9 +9,14 @@ import (
 	"github.com/CurlyQuokka/AdventOfCode2021/Day09/pkg/utils"
 )
 
+const (
+	nonBasinPoint = 9
+)
+
 type VentsAnalyzer struct {
-	data  []string
-	vents [][]int
+	data             []string
+	vents            [][]int
+	rowSize, colSize int
 }
 
 func NewVentsAnalyzer(path string) *VentsAnalyzer {
@@ -19,6 +24,8 @@ func NewVentsAnalyzer(path string) *VentsAnalyzer {
 		data: utils.LoadData(path),
 	}
 	va.prepareMap()
+	va.rowSize = len(va.vents)
+	va.colSize = len(va.vents[0])
 	return va
 }
 
@@ -73,11 +80,9 @@ func (va *VentsAnalyzer) checkVent(row, col int) (bool, int) {
 }
 
 func (va *VentsAnalyzer) CalculateRiskLevel() {
-	rowSize := len(va.vents)
-	colSize := len(va.vents[0])
 	riskLevel := 0
-	for row := 0; row < rowSize; row++ {
-		for col := 0; col < colSize; col++ {
+	for row := 0; row < va.rowSize; row++ {
+		for col := 0; col < va.colSize; col++ {
 			_, v := va.checkVent(row, col)
 			riskLevel += v
 		}
@@ -97,8 +102,8 @@ func prepareBasinMap(row, col int) [][]int {
 	return b
 }
 
-func appendPoint(points *[]pair, basinMap *[][]int, row, col int) {
-	if (*basinMap)[row][col] == 0 {
+func (va *VentsAnalyzer) appendPoint(points *[]pair, basinMap *[][]int, row, col int) {
+	if va.vents[row][col] != nonBasinPoint && (*basinMap)[row][col] == 0 {
 		p := pair{
 			row: row,
 			col: col,
@@ -109,30 +114,20 @@ func appendPoint(points *[]pair, basinMap *[][]int, row, col int) {
 }
 
 func (va *VentsAnalyzer) exploreBasin(basinMap *[][]int, points []pair) {
-	rowSize := len(va.vents)
-	colSize := len(va.vents[0])
 	newPoints := []pair{}
 	for _, p := range points {
 		(*basinMap)[p.row][p.col] = 1
 		if p.row > 0 {
-			if va.vents[p.row-1][p.col] < 9 {
-				appendPoint(&newPoints, basinMap, p.row-1, p.col)
-			}
+			va.appendPoint(&newPoints, basinMap, p.row-1, p.col)
 		}
-		if p.row < (rowSize - 1) {
-			if va.vents[p.row+1][p.col] < 9 {
-				appendPoint(&newPoints, basinMap, p.row+1, p.col)
-			}
+		if p.row < (va.rowSize - 1) {
+			va.appendPoint(&newPoints, basinMap, p.row+1, p.col)
 		}
 		if p.col > 0 {
-			if va.vents[p.row][p.col-1] < 9 {
-				appendPoint(&newPoints, basinMap, p.row, p.col-1)
-			}
+			va.appendPoint(&newPoints, basinMap, p.row, p.col-1)
 		}
-		if p.col < (colSize - 1) {
-			if va.vents[p.row][p.col+1] < 9 {
-				appendPoint(&newPoints, basinMap, p.row, p.col+1)
-			}
+		if p.col < (va.colSize - 1) {
+			va.appendPoint(&newPoints, basinMap, p.row, p.col+1)
 		}
 		va.exploreBasin(basinMap, newPoints)
 	}
