@@ -150,15 +150,15 @@ func (va *VentsAnalyzer) ScanBasins() {
 	for row := 0; row < rowSize; row++ {
 		for col := 0; col < colSize; col++ {
 			if isMin, _ := va.checkVent(row, col); isMin {
-				tmp := prepareBasinMap(rowSize, colSize)
+				basinMap := prepareBasinMap(rowSize, colSize)
 				p := pair{
 					row: row,
 					col: col,
 				}
 				points := []pair{}
 				points = append(points, p)
-				va.exploreBasin(&tmp, points)
-				basins = append(basins, calculateBasinSize(&tmp))
+				va.exploreBasin(&basinMap, points)
+				basins = append(basins, calculateBasinSize(&basinMap))
 			}
 		}
 	}
