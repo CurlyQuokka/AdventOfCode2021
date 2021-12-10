@@ -117,10 +117,12 @@ func (br *BestRoute) ProcessData() {
 		}
 		br.symbols.clearStack()
 	}
+
 	score := 0
 	for _, r := range br.corruptedSymbols {
 		score += br.scoreMap[r]
 	}
+
 	fmt.Printf("Corrupted score: %d\n", score)
 
 	sort.Ints(br.autoScores)
