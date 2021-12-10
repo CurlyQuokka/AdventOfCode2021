@@ -7,6 +7,10 @@ import (
 	"github.com/CurlyQuokka/AdventOfCode2021/Day10/pkg/utils"
 )
 
+const (
+	autoScoreMultiplier = 5
+)
+
 type symbolStack []rune
 
 func (ss *symbolStack) push(r rune) {
@@ -106,7 +110,7 @@ func (br *BestRoute) ProcessData() {
 		if !isCorrupted {
 			autoScore := 0
 			for r := br.symbols.pop(); r != rune(0); r = br.symbols.pop() {
-				autoScore *= 5
+				autoScore *= autoScoreMultiplier
 				autoScore += br.autoScoreMap[r]
 			}
 			br.autoScores = append(br.autoScores, autoScore)
