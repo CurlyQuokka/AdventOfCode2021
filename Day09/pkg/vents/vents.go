@@ -45,7 +45,7 @@ func (va *VentsAnalyzer) prepareMap() {
 }
 
 func (va *VentsAnalyzer) isBottomHigher(row, col int) bool {
-	if row == (len(va.vents)-1) || va.vents[row+1][col] > va.vents[row][col] {
+	if row == (va.rowSize-1) || va.vents[row+1][col] > va.vents[row][col] {
 		return true
 	}
 	return false
@@ -66,7 +66,7 @@ func (va *VentsAnalyzer) isLeftHigher(row, col int) bool {
 }
 
 func (va *VentsAnalyzer) isRighttHigher(row, col int) bool {
-	if col == (len(va.vents[0])-1) || va.vents[row][col+1] > va.vents[row][col] {
+	if col == (va.colSize-1) || va.vents[row][col+1] > va.vents[row][col] {
 		return true
 	}
 	return false
@@ -144,13 +144,11 @@ func calculateBasinSize(basinMap *[][]int) int {
 }
 
 func (va *VentsAnalyzer) ScanBasins() {
-	rowSize := len(va.vents)
-	colSize := len(va.vents[0])
 	basins := []int{}
-	for row := 0; row < rowSize; row++ {
-		for col := 0; col < colSize; col++ {
+	for row := 0; row < va.rowSize; row++ {
+		for col := 0; col < va.colSize; col++ {
 			if isMin, _ := va.checkVent(row, col); isMin {
-				basinMap := prepareBasinMap(rowSize, colSize)
+				basinMap := prepareBasinMap(va.rowSize, va.colSize)
 				p := pair{
 					row: row,
 					col: col,
