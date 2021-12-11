@@ -23,14 +23,9 @@ type FlashSimulator struct {
 
 func NewFlashSimulator(path string) *FlashSimulator {
 	fs := &FlashSimulator{
-		data:             utils.LoadData(path),
-		flashCounter:     0,
-		synchronizedStep: 0,
-		currentStep:      0,
+		data: utils.LoadData(path),
 	}
-	fs.prepareData()
-	fs.rowSize = len(fs.energyLevels)
-	fs.colSize = len(fs.energyLevels[0])
+	fs.Reset()
 	return fs
 }
 
@@ -40,6 +35,8 @@ func (fs *FlashSimulator) Reset() {
 	fs.rowSize = len(fs.energyLevels)
 	fs.colSize = len(fs.energyLevels[0])
 	fs.flashCounter = 0
+	fs.synchronizedStep = 0
+	fs.currentStep = 0
 }
 
 func (fs *FlashSimulator) RunSimulation(steps int) {
