@@ -148,7 +148,7 @@ func (c *cave) print() {
 }
 
 func (pf *PathFinder) GetNumberOfPaths() {
-	fmt.Printf("NUmber of paths: %d\n", len(pf.paths))
+	fmt.Printf("Number of paths: %d\n", len(pf.paths))
 }
 
 func (pf *PathFinder) Reset() {
