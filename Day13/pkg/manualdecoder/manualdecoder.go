@@ -40,7 +40,6 @@ func convertInstruction(l string) instruction {
 		dir:  up,
 		line: val,
 	}
-	fmt.Println(ils)
 
 	if ils[0] == "x" {
 		instr.dir = left
@@ -104,22 +103,7 @@ func (md *ManualDecoder) findMaxes() {
 	}
 }
 
-func (md *ManualDecoder) PrintData() {
-	utils.PrintStringSlice(md.data)
-
-	fmt.Println()
-	for _, p := range md.points {
-		fmt.Printf("%v\n", p)
-	}
-
-	fmt.Println()
-	for _, i := range md.instructions {
-		fmt.Printf("%v\n", i)
-	}
-
-	fmt.Printf("\nMax X: %d, Max Y: %d\n", md.maxX, md.maxY)
-
-	fmt.Println()
+func (md *ManualDecoder) PrintPage() {
 	for _, l := range *md.page {
 		for _, v := range l {
 			if v > 0 {
@@ -204,7 +188,6 @@ func (md *ManualDecoder) CountDots() {
 
 func (md *ManualDecoder) FoldRemaining() {
 	for i := 1; i < len(md.instructions); i++ {
-		fmt.Println(md.instructions[i])
 		md.FoldPage(md.instructions[i])
 	}
 }
